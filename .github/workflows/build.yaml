@@ -27,7 +27,7 @@ jobs:
 
       - name: Generate Random Version
         id: random_version
-        uses: ./.github/action/random-version
+        uses: actions/random-version
         with:
           prefix: 'v'
 
