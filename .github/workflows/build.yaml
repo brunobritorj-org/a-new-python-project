@@ -25,8 +25,8 @@ jobs:
       #    prefix: 'v'
 
       - name: Log into GitHub Container Registry
-        id: registry-login
-        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        id: login
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -36,7 +36,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ github.repository_owner }}/${{ github.repository }}
+          images: ${{ github.repository }}
           flavor: |
             latest=true
           tags: |
@@ -46,10 +46,10 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
 
       - name: Build the Docker image
-        id: build-and-push
+        id: build-push
         uses: docker/build-push-action@v5
         with:
           context: src/
           push: true
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
