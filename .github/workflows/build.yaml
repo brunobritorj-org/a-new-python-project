@@ -36,7 +36,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.OWNER }}/a-new-python-project
+          images: ${{ github.repository_owner }}/${{ github.repository }}
           flavor: |
             latest=true
           tags: |
