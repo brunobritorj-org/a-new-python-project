@@ -27,9 +27,10 @@ jobs:
 
       - name: Generate Random Version
         id: random_version
-        uses: ./.github/actions/random-version
+        uses: ./.github/action/random-version
         with:
           prefix: 'v'
 
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        working-directory: src/
