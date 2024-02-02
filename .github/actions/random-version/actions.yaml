@@ -1,0 +1,15 @@
+name: 'Generate Random Version'
+description: 'Generates a random version number using UUID.'
+
+inputs:
+  prefix:
+    description: 'Optional prefix to append to the generated version.'
+    required: false
+
+outputs:
+  version:
+    description: 'The generated version number.'
+
+runs:
+  using: 'python'
+  main: 'main.py'
