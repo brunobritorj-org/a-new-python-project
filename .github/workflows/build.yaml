@@ -45,7 +45,7 @@ jobs:
 
       - name: Build the Docker image
         id: build-and-push
-        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        uses: docker/build-push-action
         with:
           context: src/
           push: true
