@@ -26,8 +26,8 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Random Version
-        id: random_version
-        uses: actions/random-version
+        id: random-version
+        uses: ./.github/actions/random-version
         with:
           prefix: 'v'
 
