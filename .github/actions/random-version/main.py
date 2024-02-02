@@ -6,7 +6,7 @@ def main():
     prefix = sys.argv[1] if len(sys.argv) > 1 else None
     if prefix:
         version = prefix + '-' + version
-    print(f"'new_release={version}' >> $GITHUB_OUTPUT")
+    print(f"'release={version}' >> $GITHUB_OUTPUT")
 
 if __name__ == "__main__":
     main()
