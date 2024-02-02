@@ -18,11 +18,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate the new release id
-        id: release
-        uses: ./.github/actions/random-version
-        with:
-          prefix: 'v'
+      #- name: Generate the new release id
+      #  id: release
+      #  uses: ./.github/actions/random-version
+      #  with:
+      #    prefix: 'v'
 
       - name: Log into GitHub Container Registry
         id: registry-login
@@ -34,18 +34,20 @@ jobs:
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v5
         with:
-          images: |
-            ghcr.io/${{ env.OWNER }}/azdevops-selfhosted
+          images: ${{ env.OWNER }}/a-new-python-project
           flavor: |
             latest=true
           tags: |
-            type=raw,value=${{ steps.release.outputs.release }}
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
 
       - name: Build the Docker image
         id: build-and-push
-        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+        uses: docker/build-push-action@v5
         with:
           context: src/
           push: true
