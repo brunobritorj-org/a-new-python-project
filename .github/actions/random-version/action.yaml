@@ -11,5 +11,8 @@ outputs:
     description: 'The generated version number.'
 
 runs:
-  using: 'python'
-  main: 'main.py'
+  using: 'composite'
+  steps:
+    - name: Run Python script
+      run: python $GITHUB_ACTION_PATH/main.py "${{ inputs.prefix }}"
+      shell: bash
