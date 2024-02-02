@@ -18,19 +18,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Generate the new release id
+        id: new-release
+        uses: ./.github/actions/random-version
+        with:
+          prefix: 'v'
+
       - name: Log into GitHub Container Registry
+        id: registry-login
         uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate Random Version
-        id: random-version
-        uses: ./.github/actions/random-version
+      - name: Extract Docker metadata
+        id: build-labels
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
-          prefix: 'v'
+          images: |
+            ghcr.io/${{ env.OWNER }}/azdevops-selfhosted
+          flavor: |
+            latest=true
+          tags: |
+            type=raw,value=${{ steps.new-release.outputs.version }}
 
       - name: Build the Docker image
+        id: build-and-push
         run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-        working-directory: src/
+        with:
+          context: src/
+          push: true
+          tags: ${{ steps.build-labels.outputs.tags }}
+          labels: ${{ steps.build-labels.outputs.labels }}
